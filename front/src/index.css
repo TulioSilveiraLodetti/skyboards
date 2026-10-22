@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #0a0a0b;
+  color: #f4f4f0;
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-display {
+  font-family: "Archivo", "Arial Narrow", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: #d7ff3e;
+  color: #0a0a0b;
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0a0a0b; }
+::-webkit-scrollbar-thumb { background: #2a2a30; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #d7ff3e; }
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-wide transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-volt {
+    @apply bg-volt text-ink hover:bg-voltdark hover:shadow-glow active:scale-95;
+  }
+  .btn-ghost {
+    @apply border border-white/20 text-bone hover:border-volt hover:text-volt active:scale-95;
+  }
+  .btn-dark {
+    @apply bg-steel text-bone hover:bg-concrete active:scale-95;
+  }
+  .card {
+    @apply rounded-2xl border border-white/5 bg-coal;
+  }
+  .input {
+    @apply w-full rounded-xl border border-white/10 bg-steel px-4 py-3 text-bone placeholder-white/30 outline-none transition focus:border-volt focus:ring-2 focus:ring-volt/20;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-white/50;
+  }
+  .chip {
+    @apply rounded-full border border-white/10 px-4 py-2 text-sm font-medium transition;
+  }
+}
+
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: transform, opacity;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1.5px rgba(244, 244, 240, 0.85);
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .animate-marquee, .animate-floaty { animation: none !important; }
+}

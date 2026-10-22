@@ -1,0 +1,7 @@
+target/
+.env
+*.log
+.idea/
+.vscode/
+_sky_assets/
+HELP.md

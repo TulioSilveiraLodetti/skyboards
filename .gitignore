@@ -1,0 +1,22 @@
+# Node / front
+**/node_modules
+**/dist
+**/.vite
+
+# Java / back
+**/target
+**/.mvn/wrapper/maven-wrapper.jar
+
+# Segredos e ambiente
+**/.env
+**/.env.local
+
+# Logs e temporarios
+*.log
+**/_sky_assets
+**/boot.log
+
+# IDE / SO
+.idea/
+.vscode/
+.DS_Store
