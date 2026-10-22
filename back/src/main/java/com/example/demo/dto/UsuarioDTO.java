@@ -1,5 +1,7 @@
 package com.example.demo.dto;
 
+import java.time.LocalDateTime;
+
 import com.example.demo.enums.NivelAcesso;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -31,5 +33,8 @@ public class UsuarioDTO {
     private String senha;
 
     private NivelAcesso nivelAcesso;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime createdAt;
 
 }

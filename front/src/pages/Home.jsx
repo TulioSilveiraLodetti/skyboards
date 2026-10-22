@@ -186,6 +186,38 @@ export default function Home() {
           <Link to="/produtos" className="btn btn-ghost">Ver todos os produtos</Link>
         </div>
       </section>
+
+      {/* INSTITUCIONAL */}
+      <section className="container-x pb-24">
+        <div className="grid gap-5 md:grid-cols-2">
+          <Reveal>
+            <Link
+              to="/quem-somos"
+              className="group relative flex h-48 flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-steel to-coal p-7 transition hover:border-volt"
+            >
+              <span className="text-sm font-bold uppercase tracking-widest text-volt">Desde 2006</span>
+              <div>
+                <h3 className="font-display text-3xl font-black transition group-hover:text-volt">Quem Somos</h3>
+                <p className="mt-1 text-sm text-white/50">A história da SkyBoard's e a paixão pela cultura board.</p>
+              </div>
+              <span className="absolute right-6 top-6 text-3xl transition group-hover:translate-x-1">→</span>
+            </Link>
+          </Reveal>
+          <Reveal delay={100}>
+            <Link
+              to="/trocas"
+              className="group relative flex h-48 flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-steel to-coal p-7 transition hover:border-volt"
+            >
+              <span className="text-sm font-bold uppercase tracking-widest text-volt">Suporte</span>
+              <div>
+                <h3 className="font-display text-3xl font-black transition group-hover:text-volt">Trocas e Devoluções</h3>
+                <p className="mt-1 text-sm text-white/50">Como funciona a troca, devolução e os prazos.</p>
+              </div>
+              <span className="absolute right-6 top-6 text-3xl transition group-hover:translate-x-1">→</span>
+            </Link>
+          </Reveal>
+        </div>
+      </section>
     </div>
   );
 }

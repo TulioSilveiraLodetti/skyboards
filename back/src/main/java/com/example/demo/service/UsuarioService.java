@@ -55,6 +55,15 @@ public class UsuarioService extends BaseService<Usuario, UsuarioDTO> {
         if (dto.getNome() != null) usuario.setNome(dto.getNome());
         if (dto.getTelefone() != null) usuario.setTelefone(dto.getTelefone());
         if (dto.getEndereco() != null) usuario.setEndereco(dto.getEndereco());
+
+        // troca de email (opcional)
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()
+                && !dto.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+            repository.findByEmail(dto.getEmail()).ifPresent(outro -> {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Este e-mail já está em uso.");
+            });
+            usuario.setEmail(dto.getEmail());
+        }
         return toDto(repository.save(usuario));
     }
 
@@ -72,24 +81,49 @@ public class UsuarioService extends BaseService<Usuario, UsuarioDTO> {
     public void solicitarCodigo(RecuperacaoSolicitacaoDTO dto) {
         String email = dto.getEmail();
 
-        Usuario usuario = repository.findByEmail(email).orElseThrow();
+        Usuario usuario = repository.findByEmail(email).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "E-mail não cadastrado."));
 
-        String codigo = String.valueOf(100000000 + new Random().nextInt(900000000));
+        String codigo = String.valueOf(100000 + new Random().nextInt(900000)); // 6 dígitos
 
         usuario.setCodigoRecuperacao(codigo);
         usuario.setCodigoRecuperacaoExpiracao(LocalDateTime.now().plusMinutes(20));
 
         repository.save(usuario);
 
+        String corpo = "<div style=\"font-family:Arial,sans-serif;background:#0a0a0b;color:#f4f4f0;padding:24px;border-radius:12px\">"
+                + "<h2 style=\"color:#d7ff3e\">SkyBoard's · Recuperação de senha</h2>"
+                + "<p>Olá" + (usuario.getNome() != null ? ", " + usuario.getNome() : "") + "!</p>"
+                + "<p>Use o código abaixo para redefinir sua senha. Ele expira em 20 minutos.</p>"
+                + "<p style=\"font-size:32px;font-weight:bold;letter-spacing:8px;color:#d7ff3e\">" + codigo + "</p>"
+                + "<p style=\"color:#888\">Se você não solicitou, ignore este e-mail.</p></div>";
+
         try {
-            emailService.enviarEmail(
-                    email,
-                    "SOLICITAÇÃO DE RECUPERAÇÃO DE SENHA",
-                    "SEU CODIGO É " + codigo);
+            emailService.enviarEmail(email, "SkyBoard's · Código de recuperação de senha", corpo);
         } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Falha ao enviar o e-mail de recuperação.");
         }
+    }
+
+    @Transactional
+    public void redefinirSenha(String email, String codigo, String novaSenha) {
+        Usuario usuario = repository.findByEmail(email).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "E-mail não cadastrado."));
+
+        if (usuario.getCodigoRecuperacao() == null
+                || !usuario.getCodigoRecuperacao().equals(codigo)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código inválido.");
+        }
+        if (usuario.getCodigoRecuperacaoExpiracao() == null
+                || usuario.getCodigoRecuperacaoExpiracao().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código expirado. Solicite um novo.");
+        }
+
+        usuario.setSenha(passwordEncoder.encode(novaSenha));
+        usuario.setCodigoRecuperacao(null);
+        usuario.setCodigoRecuperacaoExpiracao(null);
+        repository.save(usuario);
     }
 
 }

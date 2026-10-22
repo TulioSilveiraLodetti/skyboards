@@ -23,7 +23,17 @@ public class PedidoDTO {
 
     private String enderecoEntrega;
 
+    private String cep;
+
+    private String tipoEntrega;
+
+    private BigDecimal frete;
+
+    private Integer prazoDias;
+
     private String formaPagamento;
+
+    private Integer parcelas;
 
     private String itensJson;
 

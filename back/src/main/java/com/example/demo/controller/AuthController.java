@@ -92,8 +92,16 @@ public class AuthController {
 
     @PutMapping("/me")
     public ResponseEntity<?> atualizarPerfil(@RequestBody UsuarioDTO dto) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return ResponseEntity.ok(usuarioService.atualizarPerfil(email, dto));
+        String emailAtual = SecurityContextHolder.getContext().getAuthentication().getName();
+        UsuarioDTO atualizado = usuarioService.atualizarPerfil(emailAtual, dto);
+
+        // se o email mudou, reemite o token (o subject do JWT é o email)
+        if (!atualizado.getEmail().equalsIgnoreCase(emailAtual)) {
+            String token = jwtUtil.generateToken(atualizado.getEmail(),
+                    atualizado.getNivelAcesso().toString());
+            return ResponseEntity.ok(Map.of("usuario", atualizado, "token", token));
+        }
+        return ResponseEntity.ok(Map.of("usuario", atualizado));
     }
 
     @PutMapping("/me/senha")
@@ -124,6 +132,7 @@ public class AuthController {
     public ResponseEntity<?> alterarSenha(
             @RequestBody @Valid RecuperarSenhaDTO dto) {
 
+        usuarioService.redefinirSenha(dto.getEmail(), dto.getCodigo(), dto.getNovaSenha());
 
         return ResponseEntity.ok(
                 Map.of("message", "Senha alterada com sucesso!"));

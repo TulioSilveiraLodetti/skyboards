@@ -59,11 +59,15 @@ function Perfil({ updateUser }) {
   const salvar = async (e) => {
     e.preventDefault();
     try {
-      await api.put("/auth/me", { nome: form.nome, telefone: form.telefone, endereco: form.endereco });
-      updateUser({ nome: form.nome });
+      const { data } = await api.put("/auth/me", {
+        nome: form.nome, telefone: form.telefone, endereco: form.endereco, email: form.email,
+      });
+      // se o email mudou, o back devolve um token novo (o email é o subject do JWT)
+      if (data?.token) localStorage.setItem("sky_token", data.token);
+      updateUser({ nome: form.nome, email: data?.usuario?.email || form.email });
       toast("Dados atualizados!");
-    } catch {
-      toast("Erro ao salvar.", "erro");
+    } catch (err) {
+      toast(err?.response?.data?.message || "Erro ao salvar.", "erro");
     }
   };
 
@@ -85,7 +89,8 @@ function Perfil({ updateUser }) {
         <label className="label">Nome</label>
         <input value={form.nome} onChange={up("nome")} className="input" />
         <label className="label mt-4">E-mail</label>
-        <input value={form.email} disabled className="input opacity-60" />
+        <input type="email" value={form.email} onChange={up("email")} className="input" />
+        <p className="mt-1 text-xs text-white/40">Você pode trocar seu e-mail. Use um e-mail válido e que ainda não esteja em uso.</p>
         <label className="label mt-4">Telefone</label>
         <input value={form.telefone} onChange={up("telefone")} className="input" />
         <label className="label mt-4">Endereço</label>

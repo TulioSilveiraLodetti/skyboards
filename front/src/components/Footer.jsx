@@ -4,7 +4,7 @@ import logoWhite from "../assets/logo-white.png";
 export default function Footer() {
   return (
     <footer className="relative z-10 border-t border-white/10 bg-coal">
-      <div className="container-x grid gap-10 py-14 md:grid-cols-4">
+      <div className="container-x grid gap-10 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         <div className="md:col-span-1">
           <img src={logoWhite} alt="SkyBoard's" className="h-12 w-auto" />
           <p className="mt-4 max-w-xs text-sm text-white/50">
@@ -20,6 +20,14 @@ export default function Footer() {
             <li><Link to="/produtos?categoria=CHINELO" className="hover:text-volt">Chinelos</Link></li>
             <li><Link to="/produtos?categoria=MOCHILA" className="hover:text-volt">Mochilas</Link></li>
             <li><Link to="/produtos?destaque=1" className="hover:text-volt">Promoções</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-volt">Institucional</h4>
+          <ul className="space-y-2 text-sm text-white/60">
+            <li><Link to="/quem-somos" className="hover:text-volt">Quem Somos</Link></li>
+            <li><Link to="/trocas" className="hover:text-volt">Trocas e Devoluções</Link></li>
           </ul>
         </div>
 

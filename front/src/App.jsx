@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CartDrawer from "./components/CartDrawer";
+import LimiteModal from "./components/LimiteModal";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Produtos from "./pages/Produtos";
@@ -12,6 +13,8 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Conta from "./pages/Conta";
 import Admin from "./pages/Admin";
+import Trocas from "./pages/Trocas";
+import QuemSomos from "./pages/QuemSomos";
 import NotFound from "./pages/NotFound";
 
 function ScrollToTop() {
@@ -24,11 +27,12 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <div className="grain min-h-screen bg-ink">
+    <div className="grain flex min-h-screen flex-col bg-ink">
       <ScrollToTop />
       <Navbar />
       <CartDrawer />
-      <main className="relative z-10">
+      <LimiteModal />
+      <main className="relative z-10 flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/produtos" element={<Produtos />} />
@@ -36,6 +40,8 @@ export default function App() {
           <Route path="/carrinho" element={<Carrinho />} />
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/trocas" element={<Trocas />} />
+          <Route path="/quem-somos" element={<QuemSomos />} />
           <Route
             path="/conta"
             element={

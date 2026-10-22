@@ -27,8 +27,23 @@ public class Pedido extends BaseEntity {
     @Column(name = "endereco_entrega", length = 500)
     private String enderecoEntrega;
 
+    @Column(name = "cep")
+    private String cep;
+
+    @Column(name = "tipo_entrega")
+    private String tipoEntrega;
+
+    @Column(name = "frete", precision = 10, scale = 2)
+    private BigDecimal frete;
+
+    @Column(name = "prazo_dias")
+    private Integer prazoDias;
+
     @Column(name = "forma_pagamento")
     private String formaPagamento;
+
+    @Column(name = "parcelas")
+    private Integer parcelas;
 
     @Column(name = "itens_json", columnDefinition = "TEXT")
     private String itensJson;
